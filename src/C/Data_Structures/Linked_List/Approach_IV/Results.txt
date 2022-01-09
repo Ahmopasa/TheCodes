@@ -1,0 +1,8 @@
+*************************************************************
+ID    AVERAGE NAME       SURNAME    CITY          YEAR MONTH  DAY
+16366 3.23    AHMET      WILSON     Hawaii        1991 Ocak    31
+15435 28.19   AHMET      WILSON     Delaware      1994 Mayis   31
+10088 37.60   FOREST     RODRIGUEZ  California    2002 Temmuz  31
+18388 43.35   EPIPHANY   ABBESTEGE  Hawaii        2002 Temmuz  31
+13564 76.78   EPPIE      JOHNSON    Delaware      2012 Ocak    31
+*************************************************************
