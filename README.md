@@ -1,8 +1,8 @@
 # TheCodes
 
-* Codes, that I saw/wrote on the Internet. So, I cannot own all of them. 
+* Codes, that I saw/wrote on the Internet. So, I cannot own all of their rights... 
 * This repository mainly includes C, C++ and C# codes and has been created for learning purposes.
-     * As time goes on, so I'll see/write more code, new pieces of code will be added. 
+     * As time goes on, which means that I'll see/write more code pieces, new ones will be added. 
 * For testing purposes, I have added Golang and Python codes as well.
 
 ## Installation
@@ -14,7 +14,6 @@
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
