@@ -1,30 +1,29 @@
 /*================================================================================================================================*/
 (01_12_09_2020)
 
-> Unspecified Behaviour: 
-	>> Derleyicinin ürettiği makine koduna bağlı. Çalışma zamanında farklı sonuçlar elde edebiliriz. Fakat derleyici, nasıl bir kod ürettiğini, belgelemek zorunda DEĞİL.
-	
-> Implementation Defined : 
-	>> Derleyicinin ürettiği makine koduna bağlı. Fakat derleyici, nasıl bir kod ürettiğini, belgelemek zorunda. 
-		* Örnek #1,
-			#include <iostream>
+> Unspecified Behaviour: Derleyicinin ürettiği makine koduna bağlı. Çalışma zamanında farklı sonuçlar elde edebiliriz. Fakat derleyici, nasıl bir kod ürettiğini, 
+belgelemek zorunda DEĞİL.
 
-			int f1()
-			{
-				return 5;
-			}
+> Implementation Defined : Derleyicinin ürettiği makine koduna bağlı. Fakat derleyici, nasıl bir kod ürettiğini, belgelemek zorunda. 
+	* Örnek #1,
+		#include <iostream>
 
-			int f2()
-			{
-				return 10;
-			}
+		int f1() 
+		{
+			return 5;
+		}
 
-			int main()
-			{
-				x = f1() + 5 * f2();
-				// Yukarıdaki kod çağrısında f1() fonksiyonunun mu önce yoksa f2() fonksiyonunun mu önce çağrılacağına dair bir garanti yok.
-				// Derleyiciye göre değişmekte. Fakat fonksiyonlar çağrıldıktan sonra, '*' işleminin önceliği olduğundan dolayı, 'x' değişkeninin değeri '55' olacaktır.
-			}
+		int f2()
+		{
+			return 10;
+		}
+
+		int main()
+		{
+			x = f1() + 5 * f2();
+			// Yukarıdaki kod çağrısında f1() fonksiyonunun mu önce yoksa f2() fonksiyonunun mu önce çağrılacağına dair bir garanti yok.
+			// Derleyiciye göre değişmekte. Fakat fonksiyonlar çağrıldıktan sonra, '*' işleminin önceliği olduğundan dolayı, 'x' değişkeninin değeri '55' olacaktır.
+		}
 
 > C ve C++ nin içerisindeki C arasındaki farklar: 
 	>> C dilinde 'bool' veri tipi mevcut değil. C99 ile '_Bool' veri tipi eklenmiş fakat bu da arka planda 'int' veri tipini kullanmakta. Fakat C++ dilinde 'bool' bir veri tipi.
@@ -102,7 +101,7 @@
 				}
 			
 		>>> NE C DİLİNDE YAZARKEN NE DE C++ DİLİNDE YAZARKEN 'const' ANAHTAR SÖZCÜĞÜ İLE NİTELENDİRİLMİŞ BİR DEĞİŞKENİ / NESNEYİ, 'C-style Casting' ile DEĞİŞTİRME GİRİŞİMİNDE BULUNMAMALIYIZ. BÖYLE BİR GİRİŞİMDE
-			BULUNMAK SENTAKS HATASIDIR. SENTAKS HATASINI BY-PASS EDEREK GİRİŞİMDE BULUNDUĞUMUZ ZAMAN, 'Tanımsız Davranış'A NEDEN OLMUŞ OLURUZ.
+		BULUNMAK SENTAKS HATASIDIR. SENTAKS HATASINI BY-PASS EDEREK GİRİŞİMDE BULUNDUĞUMUZ ZAMAN, 'Tanımsız Davranış'A NEDEN OLMUŞ OLURUZ.
 
 		>>> C dilinde 'const T*' türünden 'T*' türüne örtülü bir dönüşüm vardır, sentaks hatası değildir. Fakat C++ dilinde böyle bir örtülü dönüşüm olmadığı için sentaks hatasıdır.
 
@@ -350,7 +349,8 @@
 				// Yukarıdaki gibi 'brace-initialize' şekli kullanıldığında, 'narrowing conversion' sentaks hatasına neden olur. Harici olarak bizlerin 'casting' yapması gerekiyor.
 				// Fakat 'narrowing conversion', diğer 'initialize' şekillerinde sentaks hatasına neden olmaz. Sadece, veri kaybına neden olabilir.
 
-				// Eğer eşitliğin sol tarafındaki (işaretsiz)tür, sağ tarafındaki değeri taşıyamayacaksa, taşma meydana gelir ve 'Tanımsız Davranış'a neden olur.
+				// Eğer eşitliğin sol tarafındaki (işaretli) tür, sağ tarafındaki değeri taşıyamayacaksa, taşma meydana gelir ve 'Tanımsız Davranış'a neden olur.
+				// İşaretsiz türlerde ise taşma; rakam, bitlerin taşıyabileceği maksimum sayıya bölünür. Geriye kalan sayı, taşma sonucunda elde edilendir.
 				
 				int q{};          // Eleman hayata '0' değeri ile gelmiş olur. C++ dilinde geçerlidir, C dilinde böyle bir kullanım yoktur.
 				int t[200]{};     // C++ dilinde legal ve bütün elemanları 'zero-initialize' eder.
@@ -409,7 +409,7 @@
 haliyle 'L-Value Reference' ve 'R-Value Reference' şeklinde isimlendirebiliriz. Bunlardan,
 	>> Legacy C++ döneminden beri kullanılagelen referanslara kabaca 'L-Value Reference' denir.
 		>>> 'L Value References', bir ismin yerine geçen referans isimlerdir. Hayata gelirken ilk değer vermek zorunludur. 
-			>>>> 'non-const' Referansları, değişkenlerimize bağlarken tür uyuşmazlığı olmamalı.
+			>>>> 'non-const L Value References', değişkenlerimize bağlarken tür uyuşmazlığı olmamalı.
 
 			* Örnek 1,
 				// Some codes here...
@@ -706,8 +706,8 @@ haliyle 'L-Value Reference' ve 'R-Value Reference' şeklinde isimlendirebiliriz.
 		
 		>>> Elemanları 'pointer' olan bir 'array' mevcut, fakat elemanları 'reference' olan bir dizi mevcut değildir.
 		
-	>> C++ dilindeki 'R-Value Referance' lar 'move semantics' ve 'perfect forwarding' mekanizmalarında kullanılırlar. İki adet '&' işareti deklaratör olarak kullanılır. Nasılsa 'L-Value Referance' lara
-	'L-Value Expression' ile ilk değer vermek mecburi ise, ki referansın 'const' olmadığı varsayılıyor, 'R-Value Referance' lara da 'R-Value Referance' ile ilk değer vermek mecburidir. 
+	>> C++ dilindeki 'R-Value Referance' lar 'move semantics' ve 'perfect forwarding' mekanizmalarında kullanılırlar. İki adet '&' işareti deklaratör olarak kullanılır. Nasılki 'L-Value Referance' lara
+	'L-Value Expression' ile ilk değer vermek mecburi, ki referansın 'const' olmadığı varsayılıyor, 'R-Value Referance' lara da 'R-Value Referance' ile ilk değer vermek mecburidir. 
 		* Örnek 1,
 			// Some code here...
 			
@@ -909,7 +909,7 @@ haliyle 'L-Value Reference' ve 'R-Value Reference' şeklinde isimlendirebiliriz.
 		
 				>>>>> PROFESYONEL DÜZEYDE BIR IFADENIN 'Value Category' BULMAK IÇIN KULLANABILECEĞIMIZ KOD:
 					* Örnek 1,
-						#define pvc(x)    (std::cout << "value category of '" #x << "' is : " << Valcat<decltype((x))>::pvcat << "\n")
+						#define pvc(x)    (std::cout << "value category of '" #x << "' is : " << Valcat<decltype((x))>::pvcat << "\n") // ' #s ' converts the argument into double quotation mark, aka 'Stringizing operator (#)'
 
 						template<typename T>
 						struct Valcat {
@@ -939,6 +939,50 @@ haliyle 'L-Value Reference' ve 'R-Value Reference' şeklinde isimlendirebiliriz.
 						  pvc(x++);
 						  pvc((x,y));
 						  pvc(*ptr);
+						}
+
+					* Örnek 2,
+						//..
+						#define pvc(x)    (std::cout << "The Result of (" << #x << ") = " << (x) << ", " << Valcat<decltype((x))>::pvcat << "\n")
+										// #x ifadesi, argüman olan ifadeyi bir yazıya çevirmiştir.
+										// (x) ifadesi, argüman olan ifadenin hesaplanmış halidir.
+
+						template<typename T>
+						struct Valcat {
+						constexpr static const char *pvcat = "R value";
+						};
+
+						template<typename T>
+						struct Valcat<T &> {
+						constexpr static const char *pvcat = "L value";
+						};
+
+						template<typename T>
+						struct Valcat<T&&> {
+						constexpr static const char *pvcat = "X value";
+						};
+
+						#include <iostream>
+
+						int main()
+						{
+							/*
+								# OUTPUT #
+								The Result of (x) = 10, L value
+								The Result of (++x) = 11, L value
+								The Result of (x++) = 11, R value
+								The Result of ((x,y)) = 20, L value
+								The Result of (*ptr) = 12, L value
+							*/
+							int x = 10;
+							int y = 20;
+							int *ptr = &x;
+
+							pvc(x);
+							pvc(++x);
+							pvc(x++);
+							pvc((x,y));
+							pvc(*ptr);
 						}
 
 > C++ dilinde kullanılan akronimler:
@@ -1964,7 +2008,6 @@ imzalarında kullanılması pek tavsiye edilmez. İstisnai durum olarak ikinci �
 				int square(int);
 			
 			// Ahmo.c
-				
 				int square(int x)
 				{
 					return x*x;
@@ -2029,7 +2072,7 @@ imzalarında kullanılması pek tavsiye edilmez. İstisnai durum olarak ikinci �
 			
 			int main()
 			{
-				int x{823});
+				int x{823};
 				
 				const int* cptr = &x;
 				
@@ -2042,7 +2085,7 @@ imzalarında kullanılması pek tavsiye edilmez. İstisnai durum olarak ikinci �
 			
 			int main()
 			{
-				unsigned int x{823});
+				unsigned int x{823};
 				char* p = reinterpret_cast<char*>(&x);
 			}
 	
@@ -3068,26 +3111,37 @@ BU TİP NESNELERİN HAYATINI BİZ PROGRAMCILAR BİTİRMELİ. BUNU YAPAN OPERATÖ
 	>> 'copy-initialization' : "Myclass mx = 200;" şeklindeki hayata getiriş biçimidir. Tehlikelidir. Uygun şartlar altında parantezin sağ tarafındaki 'primitive' türden değişkenleri sınıf türüne
 	dönüştürebilir.
 	
-	>> 'direct-list-initialization' : "Myclass mx{500};" şeklindeki hayata getiriş biçimidir. 'brace initialization' da denir. Narrowing Conversion sentaks hatasına neden olur. Yukarıdaki her iki
+	>> 'direct-list-initialization' : "Myclass mx{500};" şeklindeki hayata getiriş biçimidir. 'brace initialization' da denir. 'Narrowing Conversion' sentaks hatasına neden olur. Yukarıdaki her iki
 	yöntemde ise bu durum LEGAL ama veri kaybına neden olur.
 	
 	>> Yukarıdaki üç yöntem için örnek,
 		* Örnek 1,
 			// some code here...
 			struct Myclass{
-				Myclass(int x, int y)
-				{
-					//
-				}
-				int mx, my; 
-			};	
-
-			int main()
+			Myclass(int x, int y)
 			{
-				Myclass m1(12, 24); // direct-initialize
-				Myclass m2{36, 48}; // brace-initialize
-				Myclass m3 = {60, 72}; // copy-initialize
+				mx = x;
+				my = y;
 			}
+			int mx, my; 
+		};	
+
+		int main()
+		{
+			/*
+				# OUTPUT #
+				12_24
+				36_48
+				60_72
+			*/
+			Myclass m1(12, 24); // direct-initialize
+			Myclass m2{36, 48}; // brace-initialize
+			Myclass m3 = {60, 72}; // copy-initialize
+			
+			std::cout << m1.mx << "_" << m1.my << std::endl;
+			std::cout << m2.mx << "_" << m2.my << std::endl;
+			std::cout << m3.mx << "_" << m3.my << std::endl;
+		}
 
 > ODR (One-Definition-Rule) ve 'inline' Fonksiyonlar: 
 	>> Cpp dilinde değişkenlerin, fonksiyonların ve sınıfların bildirimleri birden fazla kez yapılabilir fakat tanımlarının birden fazla kez yapılması ya SENTAKS HATASI ya da 'tanımsız davranış'. 
@@ -3192,7 +3246,7 @@ BU TİP NESNELERİN HAYATINI BİZ PROGRAMCILAR BİTİRMELİ. BUNU YAPAN OPERATÖ
 		>>> Derleyici tarafından 'implicitly-declared' olan 'special member functions' birer 'inline' fonksiyonlardır.
 
 > Sınıflar (devam) : 
-	>> Ctor Initializer List / Member Initializer List: Yalnızca Kurucu İşlevlere özgü bir sentaks özelliğidir. Sınıfın 'non-static' veri elemanlarına ilk değer verir.	
+	>> Ctor. Initializer List / Member Initializer List: Yalnızca Kurucu İşlevlere özgü bir sentaks özelliğidir. Sınıfın 'non-static' veri elemanlarına ilk değer verir.	
 		* Örnek 1,
 			// Some code here...
 			
@@ -5300,7 +5354,6 @@ dosyalarda bahsi geçen değişkenimizin tanımı olacağından, 'ODR' ihlal edi
 							func(); // LEGAL. ÇÜNKÜ 'func()' FONKSİYONU GİZLİ BİR SINIF TÜRÜNDEN ADRES ALMAMAKTA.
 						}
 
-
 					private:
 						int mx;
 				};	
@@ -5544,8 +5597,8 @@ dosyalarda bahsi geçen değişkenimizin tanımı olacağından, 'ODR' ihlal edi
 					}
 
 				private:
-					Complex(double r, double i, int); // 3rd parameter is a dummy.
 					Complex(double angel, double distance);
+					Complex(double r, double i, int); // 3rd parameter is a dummy.
 
 					// 'Copy Ctor' ve 'Copy Assignment Func' was omitted.
 			};
@@ -7125,7 +7178,7 @@ nesneler ile Dinamik Bellek Yönetimi birbirinin eşleniği DEĞİLDİR. Sadece 
 									
 								mp = other.mp;
 								
-								other.mp = delete;
+								other.mp = nullptr;
 							}
 
 						private:
@@ -8720,7 +8773,6 @@ nesneler ile Dinamik Bellek Yönetimi birbirinin eşleniği DEĞİLDİR. Sadece 
 (14_25_10_2020)
 
 > Sınıflar (devam) :
-
 	>> Composition (devam) : 
 		>>> Composition içerisinde Move Ctor ve Move Assigningment : Tıpkı 'Copy Ctor' ve 'Copy Assigningment Function' larda olduğu gibi bu ikisini derleyici yazarsa 'data members' lar birbirine karşılıklı olarak taşınmaktadır.
 		Eğer biz yazıyorsak yine bütün 'data member' lara değinmeliyiz. Pas geçtiklerimiz ya 'Default Init.' edilecektir ya da ATANMAMIŞ olacaklardır. Dolayısıyla bizim yazacağımız bu iki fonksiyon da aşağıdaki gibi olmalı:
@@ -11870,7 +11922,7 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 				std::cout << "Bir yazi giriniz: ";
 				std::getline(std::cin, str); // INPUT => Ahmet Kandemir Pehlivanli
 				auto idx = str.find('a'); 
-				if(idx != std::string::npos) // if-with init. since C++17
+				if(idx != std::string::npos) 
 				{
 					std::cout << "bulundu. indeks : " << idx << "\n"; // OUTPUT => bulundu. indeks : 7
 					str[idx] = '@';
@@ -12149,6 +12201,39 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 					std::cout << "sizeof(Member) : " << sizeof(Member) << "\n";
 					std::cout << "sizeof(Car)    : " << sizeof(Car) << "\n";
 					std::cout << "sizeof(Volvo)  : " << sizeof(Volvo) << "\n";
+				}
+				
+			* Örnek 2,
+				//..
+				struct LearningC{
+					int x;
+					double y;
+				}first;
+
+				int main()
+				{
+					/*
+						# OUTPUT # 
+						// Cpp
+						&first   => 0x5651f01f6160
+						&first.x => 0x5651f01f6160
+						&first.y => 0x5651f01f6168
+					*/
+					// std::cout << "&first   => " << &first << std::endl;
+					// std::cout << "&first.x => " << &first.x << std::endl;
+					// std::cout << "&first.y => " << &first.y << std::endl;
+					
+					/*
+						# OUTPUT # 
+						// C
+						&first => 0x55f57abfc020
+						&first.x => 0x55f57abfc020
+						&first.y => 0x55f57abfc028
+					*/
+					printf("&first => %p\n", &first);
+					printf("&first.x => %p\n", &first.x);
+					printf("&first.y => %p\n", &first.y);
+					return 0;
 				}
 	
 		>>> İsim arama: C++ dilinde her şeyin başı 'name look-up'. 'Base-class' ve 'Derived-class' farklı alanlara sahip. İSİM ARAMA, ARANAN İSMİN BULUNMASI İLE BİTER. 'inheritence' mekanizmasında da isim arama şu şekilde meydana
@@ -13077,6 +13162,7 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 					/*
 						# OUTPUT #
 						void Airplane::takeOff() was called...
+						void Chessna::fly() was called...
 					*/
 					
 					Chessna myPlane;
@@ -13084,7 +13170,7 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 					
 					myPlanePtr->takeOff(); // İsim arama kuralları gereği 'takeOff' ismi 'Airplane' sınıfı içerisinde aranacak ve bulunacak. Derleme zamanında ona bağlanacaktır.
 					
-					myPlanePtr->fly(); // İsim arama kuralları gereği 'takeOff' ismi 'Airplane' sınıfı içerisinde aranacak fakat Hangi fonksiyonun çağrılacağı 'Çalışma Zamanında' belli olacaktır. Buna sebebiyet veren şey ise 
+					myPlanePtr->fly(); // İsim arama kuralları gereği 'fly' ismi 'Airplane' sınıfı içerisinde aranacak fakat Hangi fonksiyonun çağrılacağı 'Çalışma Zamanında' belli olacaktır. Buna sebebiyet veren şey ise 
 									// ilgili 'fly' fonksiyonun Taban Sınıfta 'virtual' olarak nitelendirilmesi.
 									// Burada yapılan çağrının 'gösterici' veya 'referans' ile YAPILMASI ÖNEMLİDİR.
 				}
@@ -13325,7 +13411,6 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 					{	
 						/*
 							# OUTPUT #
-							error:   overriding ‘virtual void Airplane::func()’
 						*/
 						//..
 						
@@ -13738,7 +13823,7 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 
 					ival = std::stoi(str, &idx, 16);
 					std::cout << "ival : " << ival << "\n"; // OUTPUT => ival : 4670
-					std::cout << "idx  : " << idx << "\n"; // OUTPUT => idx  : 4 // İlgili yazıdaki 'e' karakteri de dahil edildi.
+					std::cout << "idx  : " << idx << "\n"; // OUTPUT => idx  : 4 // İlgili yazıdaki 'E' karakteri de dahil edildi.
 				}
 			
 /*================================================================================================================================*/
@@ -14038,6 +14123,142 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 							// İşte sanal olmayan fonksiyonlar ile sanal fonksiyonların çağrılmasına da 'NVI' denmektedir, non-virtual interface. Bu yaklaşım biçiminde, sanal fonksiyonlar dışarıya KAPALIDIR.
 							// Bir diğer deyişle SANAL FONKSİYONLARIMIZI 'private' yaparak ve onlara bir 'public' ama sanal olmayan fonksiyon ile çevrelemiş olduk.
 						}
+						
+				* Örnek 2,
+					#include <iostream>
+					#include <random>
+					class Car{
+						private:
+							virtual void start() { std::cout << "Car has just started..." << std::endl; }
+							virtual void run() { std::cout << "Car has just running..." << std::endl; }
+							virtual void stop() { std::cout << "Car has just stopped..." << std::endl; }
+							
+						public:
+							void handleCar() { start(); run(); stop(); }
+					};
+
+					class Tesla : public Car{
+						private:
+							virtual void start() override { std::cout << "Tesla has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Tesla has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Tesla has just stopped..." << std::endl; } 
+							void charge() { std::cout << "Tesla has just charged..." << std::endl; }
+					};
+
+					class Tesla_S500 : public Tesla{
+						private:
+							virtual void start() override { std::cout << "Tesla_S500 has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Tesla_S500 has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Tesla_S500 has just stopped..." << std::endl; } 
+					};
+
+					class Ford : public Car{
+						private:
+							virtual void start() override { std::cout << "Ford has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Ford has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Ford has just stopped..." << std::endl; } 
+					};
+
+					class Nissan : public Car{
+						private:
+							virtual void start() override { std::cout << "Nissan has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Nissan has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Nissan has just stopped..." << std::endl; } 
+					};
+
+					class Fiat : public Car{
+						private:
+							virtual void start() override { std::cout << "Fiat has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Fiat has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Fiat has just stopped..." << std::endl; } 
+					};
+
+					class Volvo : public Car{
+						private:
+							virtual void start() override { std::cout << "Volvo has just started..." << std::endl; }
+							virtual void run() override { std::cout << "Volvo has just running..." << std::endl; }
+							virtual void stop() override { std::cout << "Volvo has just stopped..." << std::endl; } 
+					};
+
+					Car* carFactory()
+					{
+						static std::mt19937 eng{ std::random_device{}() };
+						static std::uniform_int_distribution<> dist{1, 6};
+						
+						switch(dist(eng))
+						{
+							case 0: std::cout << "The Tesla case.\n"; return new Tesla;
+							case 1: std::cout << "The Tesla_S500 case.\n"; return new Tesla_S500;
+							case 2: std::cout << "The Ford case.\n"; return new Ford;
+							case 3: std::cout << "The Nissan case.\n"; return new Nissan;
+							case 4: std::cout << "The Fiat case.\n"; return new Fiat;
+							case 5: std::cout << "The Volvo case.\n"; return new Volvo;
+							default: return nullptr;
+						}
+					}
+
+					void car_game(Car* carPtr)
+					{
+						carPtr->handleCar();
+						std::cout << "//----------------------------------------------------------\n";
+					}
+
+					int main()
+					{
+						/*
+							# OUTPUT #
+							The Nissan case.
+							Nissan has just started...
+							Nissan has just running...
+							Nissan has just stopped...
+							//----------------------------------------------------------
+							The Volvo case.
+							Volvo has just started...
+							Volvo has just running...
+							Volvo has just stopped...
+							//----------------------------------------------------------
+							The Volvo case.
+							Volvo has just started...
+							Volvo has just running...
+							Volvo has just stopped...
+							//----------------------------------------------------------
+							The Nissan case.
+							Nissan has just started...
+							Nissan has just running...
+							Nissan has just stopped...
+							//----------------------------------------------------------
+							The Ford case.
+							Ford has just started...
+							Ford has just running...
+							Ford has just stopped...
+							//----------------------------------------------------------
+							The Fiat case.
+							Fiat has just started...
+							Fiat has just running...
+							Fiat has just stopped...
+							//----------------------------------------------------------
+							The Nissan case.
+							Nissan has just started...
+							Nissan has just running...
+							Nissan has just stopped...
+							//----------------------------------------------------------
+							The Tesla_S500 case.
+							Tesla_S500 has just started...
+							Tesla_S500 has just running...
+							Tesla_S500 has just stopped...
+							//----------------------------------------------------------
+							The Volvo case.
+							Volvo has just started...
+							Volvo has just running...
+							Volvo has just stopped...
+							//----------------------------------------------------------
+						*/
+						for(size_t counter{}; counter < 100; ++counter)
+							car_game(carFactory());
+
+						return 0;
+					}
+
 
 				>>>>> Buradan da hareketle diyebiliriz ki taban sınıfın 'private' alanında bildirilen/tanımlanan sanal fonksiyonlar, türemiş sınıf içerisinde 'override' edilebilirler.
 			
@@ -14802,7 +15023,7 @@ kapsam sızıntılarını engellemek için ilgili bloğu bir '{}' içerisine al�
 							}
 						}
 			
-		>>> Global Fonksiyonların Sanal Olmaları: Normal şartlarda Global Fonksiyonlar 'virtual' olamazlar. Aynı şekilde 'non-static member function' lar da olamazlar. Fakat bir takım yaklaşımlar ile Global Fonksiyonları 'virtual'
+		>>> Global Fonksiyonların Sanal Olmaları: Normal şartlarda Global Fonksiyonlar 'virtual' olamazlar. Aynı şekilde 'static member function' lar da olamazlar. Fakat bir takım yaklaşımlar ile Global Fonksiyonları 'virtual'
 		hale getirebiliriz. Aşağıdaki örneği inceleyelim:
 			* Örnek 1,
 				// CAR.hpp
@@ -16567,7 +16788,7 @@ Myclass sınıfındaki diğer öğelere erişim sentaks hatası olsun.
 					AB myAB;
 					
 					f(&myAB); // Sentaks hatası oluşacaktır. Burada 'Function Overloading' SÖZ KONUSUDUR. Fakat 'upcasting' konusunda bir öncelik olmadığından,
-							// 'ambiguity' tip sentaks hatası alacağız. Bu hatayı aşmak için de 'static_cast<>()' ile 'A*' veya 'B*' türlerine dönüşüm yapabiliriz.
+							  // 'ambiguity' tip sentaks hatası alacağız. Bu hatayı aşmak için de 'static_cast<>()' ile 'A*' veya 'B*' türlerine dönüşüm yapabiliriz.
 					
 					f(static_cast<A*>(&myAB)); // Referansa dönüşüm => f(static_cast<A&>(&myAB));
 					f(static_cast<B*>(&myAB));
@@ -17002,15 +17223,15 @@ Myclass sınıfındaki diğer öğelere erişim sentaks hatası olsun.
 	
 	>> Giriş-Çıkış akımlarının hiyerarşisi:
 		/* (T : Template), (virtual: virtual-inheritence)
-								ios_base
+							  ios_base
 								|
-							basic_ios(T)
+							  basic_ios(T)
 							/ 			  \
 					basic_istream(T)  basic_ostream(T)
 						(virtual)		  (virtual)
 					/			\		/			\
-				/		 basic_iostream(T)		 \
-				/				   |				  \
+				   /   	   basic_iostream(T)	     \
+				  /				   |				  \
 		basic_ifstream(T)   basic_fstream(T)	  basic_ofstream(T)
 		
 		*/
@@ -17302,7 +17523,7 @@ yönelik hataların bulunması, ele alınmasına yönelik çalışmalar.
 				f1();
 				std::cout << "main sona erdi.\n";
 				
-				// Çıktıktan da görüldüğü üzere bir hata gönderildikten sonra programın akışı artık başka yere geçmektedir.
+				// Çıktıtan da görüldüğü üzere bir hata gönderildikten sonra programın akışı artık başka yere geçmektedir.
 			}
 	
 	>> Herhangi bir hatanın yakalanmaması durumunda 'std::terminate()' fonksiyonunun, onun da arka planda 'abort()' fonksiyonunu çağırdığını göstermiştik. İşte 'std::terminate'
@@ -19440,6 +19661,47 @@ mutlaka belirtmeliyiz. Yani o fonksiyonu üçüncü parti kişilere açacaksak m
 					// 're-throw' edilmektedir.
 				}
 
+		* Örnek 4,
+			//..
+			class Myclass{
+				public:
+					explicit Myclass() try : m_x{31}
+					{
+						std::cout << "Myclass::Myclass(int " << m_x << ") was called." << std::endl;
+						
+						throw 62;
+					}
+					catch(int)
+					{
+						std::cout << "An exception has been caught!!!" << std::endl;
+					}
+					
+					friend std::ostream& operator<<(std::ostream& os, const Myclass& other)
+					{
+						return os << "[" << other.m_x << "]\n";
+					}
+					
+				private:
+					int m_x{};
+			};
+
+			class Other{
+				public:
+					inline static Myclass myClass{};
+			};
+
+			int main()
+			{
+				/*
+					# OUTPUT #
+					Myclass::Myclass(int 31) was called.
+					An exception has been caught!!!
+					terminate called after throwing an instance of 'int'
+				*/
+				return 0;
+			}
+
+
 > Sınıflar (devam) : 
 	>> RTTI (Run Time Type Identification/Information) / (Çalışma Zamanında Tür Belirlenmesi) : Normal koşullarda, çalışma zamanında bir türün ne olduğunu bilmemize GEREK YOK. Çünkü Nesne Yönelim Programlamaya uygun kod yazarken,
 	aşağıdaki kodların ne olacağını bilmeden kod yazıyoruz. Örneğin, ilgili fonksiyona gelen nesne 'Mercedes' türünden bir 'Car' ise 'open_sunroof()' fonksiyonunu aç, şeklinde bir sorumuz olsun. Bu durumda biz OOP paradigmasından
@@ -20321,7 +20583,8 @@ mutlaka belirtmeliyiz. Yani o fonksiyonu üçüncü parti kişilere açacaksak m
 		bunu kapatabiliriz. 
 	
 > 'Exception Handling' (devam) : Statik ömürlü nesnelerin hayata gelmesi sırasında DIŞARIYA bir hata gönderilirse BU HATAYI HİÇ BİR ŞEKİLDE YAKALAYAMAYIZ. Bir diğer deyişle global isim alanındaki nesnelerin veya sınıfların
-'static' veri elemanı olan nesnelerin Ctor. fonksiyonlarından dışarıya fırlatılan hataları YAKALAYAMAYIZ. Çünkü bu tip nesneler 'main' fonksiyonundan da önce çağrılmaktadırlar. 
+'static' veri elemanı olan nesnelerin Ctor. fonksiyonlarından dışarıya fırlatılan hataları YAKALAYAMAYIZ. Çünkü bu tip nesneler 'main' fonksiyonundan da önce çağrılmaktadırlar. Sadece 'function try-block' kullanarak
+yakalama yapabiliriz.
 
 > Şablonlar ve Jenerik Programlama: Tek kodun birden fazla türe hizmet etmesi durumudur. Temel olarak iki farklı grupta incelenir. Bunlar 'function template' ve 'class template' ki bunlar sırası ile fonksiyon şablonları ve
 sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki grup daha eklenmiş oldu ki bunlar sırasıyla 'variable template' ve 'alias template' şeklinde gruplardır.
@@ -20341,7 +20604,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 				>>>>> Şablon parametreleri istediğimiz kadar olabilir, bir tane olacak diye bir zorlama yoktur. Dolayısıyla bu tip şablonlara da birden fazla tür bilgisini geçmeliyiz, duruma göre.
 					* Örnek 1,
 						//..
-						template<typename A, typename B> // Artık bu şablon ne için kullanılacak ise iki farklı tür bilgisi geçmemiz gerekiyor.
+						template<typename A, typename B> // Artık bu şablon ne için kullanılacak ise iki adet tür bilgisi geçmemiz gerekiyor.
 				
 				>>>>> Derleyicinin derleme zamanında 'T', 'U' gibi harflerin yerine koyacağı gerçek türler için 'Template Type Arguments' denmektedir. Yani Şablon Tür Argümanları şeklinde de söyleyebiliriz. Bu durumda bu 'T' ve
 				'U' harfleri için 'Template Parameter' denirken, bu türlere karşılık gelen gerçek türlere ise 'Templete Type Arguments' denmektedir. 
@@ -20383,7 +20646,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 					
 					int main()
 					{
-						std::array<int, 100> ar; // i. 'Template Type Parameter' olan 'T' yerine 'Template Type Argument' olarak 'int' bilgisi geçilmiştir. Şablonda 'T' geçen her yerde 'int' kullanılacaktır.
+						std::array<int, 10> ar; // i. 'Template Type Parameter' olan 'T' yerine 'Template Type Argument' olarak 'int' bilgisi geçilmiştir. Şablonda 'T' geçen her yerde 'int' kullanılacaktır.
 												 // ii. 'Template Non Type Parameter' olarak da '10' sabiti 'Template Non Type Argument' olarak geçilmiştir. Şablonda artık 'Template Non Type Parameter' geçen her yerde '10'
 												 // sabiti kullanılacaktır.
 												 // Bizler gerek 'Template Type Parameter' bilgisini gerek 'Template Non-Type Parameter' bilgisini derleyiciye kendi elimiz ile geçmiş olduk('Explicit Template Argument').
@@ -21007,12 +21270,6 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 								x *= 2;
 							}
 
-							template<typename T>
-							void funcThree(T&& x)
-							{
-								x *= 2;
-							}
-
 							int main()
 							{
 								int ival = 123;
@@ -21424,6 +21681,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 				//.. BU DURUM SENTAKS HATASIDIR.
 			}
 			
+			template<typename T, typename U>
 			auto foo(T a, U b) -> decltype(a+b)
 			{
 				//.. BU DURUM LEGALDİR.
@@ -23591,7 +23849,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 				// std::vector<int>::iterator iter = ivec.begin();
 				
 				std::cout << *iter << "\n"; // Konumu tutulan nesneye eriştik ve onu yazdırdık.
-				++iter; // Konumu tutulan nesneye eriştik ve değerini bir arttırdık.
+				++iter; // Konum bilgisini bir arttırdık.
 				std::cout << *iter << "\n"; // Konumu tutulan nesneye eriştik ve onu yazdırdık.
 				
 				for(auto iter = ivec.begin(); iter != ivec.end(); ++iter)
@@ -23666,7 +23924,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 			>>>> 'input_iterator' : 'input_iterator_tag' türünün 'typedef' halidir. Bu '_tag' isimleri boş bir 'struct' şeklindedir. 'istream_iterator' ve 'istreambuf_iterator' grupları, bu tip iteratörlere sahiptirler. Bu tip
 			iteratörler, 'output_iterator' grubunun yapabildiklerini yapabilmektedirler. Ek olarak 'operator==' ve 'operator!=' operatörlerine de operand olabiliyorlar. 
 			
-			>>>> 'forward_iterator' : 'forward_iterator' türünün 'typedef' halidir. Bu '_tag' isimleri boş bir 'struct' şeklindedir. 'forward_list', 'unordered_map', 'unordered_multimap', 'unordered_set' ve 'unordered_multiset'
+			>>>> 'forward_iterator' : 'forward_iterator_tag' türünün 'typedef' halidir. Bu '_tag' isimleri boş bir 'struct' şeklindedir. 'forward_list', 'unordered_map', 'unordered_multimap', 'unordered_set' ve 'unordered_multiset'
 			grupları bu tip iteratörlere sahiptirler. Bu tip iteratörler 'input_iterator' ve 'output_iterator' gruplarının yapabildiklerini yapabilmektedir. Ek olarak bu tip iteratörler 'Default Constructable' haldedirler.
 			
 			>>>> 'bidirectional_iterator' : 'bidirectional_iterator_tag' türünün 'typedef' halidir. Bu '_tag' isimleri boş bir 'struct' şeklindedir. 'list', 'set', 'multiset', 'map' ve 'multimap' grupları bu tip iteratörlere
@@ -24258,8 +24516,8 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 					while (beg != end)
 						if(myPredicate(*beg))
 						{
-							return beg;
 							++beg;
+							return beg;
 						}
 						
 					return beg;
@@ -24385,7 +24643,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 						std::cout << "Uzunluğu " << lengthToCount << " olan " << std::count_if(
 																								myVec.begin(), 
 																								myVec.end(),
-																								[lengthToCount] (const std::string& s)    	 { return s.length() == m_length; } ) << " adet isim vardır.\n"; 
+																								[lengthToCount] (const std::string& s)    	 { return s.length() == lengthToCount; } ) << " adet isim vardır.\n"; 
 																				//'operator()()'                fonksiyonunun parametresi ve bloğu. 
 					}
 					
@@ -24603,7 +24861,7 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 						template<typename Iter>
 						void MyAdvanceImplementation(Iter& iter, int n, std::bidirectional_iterator_tag)
 						{
-							if( n> 0)
+							if( n > 0)
 							{
 								while(n--)
 									++iter;
@@ -25053,8 +25311,8 @@ sınıf şablonları şeklinde de isimlendirilebilir. Modern C++ ile dile iki gr
 					auto gg  = [&a, &b, &c](){ ++a; ++b; ++c; }; // Artık legal hale geldi. // 'capture by reference'
 					auto ggg = [&](){ ++a; ++b; ++c; }; 		 // Artık legal hale geldi. // 'capture all by reference'
 					
-					auto h   = [=, &a](){ return ++a * b * c; }; // 'a' değişkeni 'capture by reference' ile fakat diğerleri 'capture by copy' ile elde edilmiştir.
-					auto hh  = [&, b](){ return a * ++b * c; }; // 'b' değişkeni 'capture by copy' ile fakat diğerleri 'capture by reference' ile elde edilmiştir.
+					auto h   = [=, &a](){ return ++a * b * c; }; // 'a' değişkeni 'capture by reference' ile fakat diğerleri 'capture all by copy' ile elde edilmiştir.
+					auto hh  = [&, b](){ return a * ++b * c; }; // 'b' değişkeni 'capture by copy' ile fakat diğerleri 'capture all by reference' ile elde edilmiştir.
 					
 					// UNUTULMAMALIDIR Kİ YUKARIDAKİ 'f', 'ff', 'fff', 'g', 'gg', 'ggg', 'h' ve 'hh' sınıf türünden nesneler bir fonksiyon çağrı operatörünün operandı olmadıklarından, ilgili 'a', 'b' ve 'c' isimli değişkenler
 					// üzerinde bir etkiye sahip değillerdir.
@@ -26745,7 +27003,7 @@ de bir 'range' içerisine yazacaktır.
 				std::cout << "[" << std::distance(nameList.begin(), nameList.insert(nameList.end()      , 4, "IIII"))                              << "] => "; pc(nameList, " | ");
 			}
 			
-	>> '.emplace()' fonksiyonları: Eklemenin yapılacağı bellek alanını 'this' göstericisi olarak kullanıp, yerine bir nesne hayata getirmektedir. Yani ne kopyalama semantiği ile ne de taşıma semantiği ile bir nesne hayata 
+	>> '.emplace()' fonksiyonları: Eklemenin yapılacağı bellek alanını 'this' göstericisi olarak kullanıp, yerinde bir nesne hayata getirmektedir. Yani ne kopyalama semantiği ile ne de taşıma semantiği ile bir nesne hayata 
 	getirilmemektedir. Direkt olarak nokta atışı, o noktada nesne hayata getiriliyor.
 		* Örnek 1,
 			//..
@@ -27160,7 +27418,7 @@ de bir 'range' içerisine yazacaktır.
 		{
 			std::cout << "\nriter        : " << *riter << "\n";
 			std::cout << "riter.base() : " << *(riter.base()) << "\n";
-			iVec.erase(std::prev(riter.base())); // Büyük ihtimal ile biz '.base()' ile 'iterator' elde ettik. 
+			iVec.erase(std::prev(riter.base())); // Reverse Iterator kullandığımız için, '.erase()' fonksiyonu da bu parametreli 'overload' olmadığından.
 		}
 
 		for(auto index : iVec)
@@ -27282,6 +27540,7 @@ de bir 'range' içerisine yazacaktır.
 			}
 
 	>> 'stable_sort()' : Aynı anahtara sahip değerlerin izafi konumları sıralamadan sonra da korunma garantisini veren sıralamadır. '.sort()' bu GARANTİYİ VERMEMEKTEDİR. // https://en.cppreference.com/w/cpp/algorithm/stable_sort
+	Yani sıralama öncesinde aynı 'key' değerine sahip 'value' lerin kendi içindeki sıralaması, sıralamadan sonra da aynı kalmaktadır.
 		* Örnek 1,
 			//..
 			int main()
@@ -27743,6 +28002,45 @@ de bir 'range' içerisine yazacaktır.
 				}
 			}
 
+		* Örnek 3,
+			//..
+			#include <algorithm>
+			#include <iostream>
+			#include <string>
+			#include <vector>
+			 
+			struct Employee
+			{
+				int age;
+				std::string name;  // Does not participate in comparisons
+			};
+			 
+			bool operator<(const Employee & lhs, const Employee & rhs)
+			{
+				return lhs.age < rhs.age;
+			}
+			 
+			int main()
+			{
+				/*
+					# OUTPUT #
+					32, Arthur
+					108, Zaphod
+					108, Ford
+				*/
+				std::vector<Employee> v =
+				{ 
+					{108, "Zaphod"},
+					{32, "Arthur"},
+					{108, "Ford"},
+				};  
+			 
+				std::stable_sort(v.begin(), v.end());
+			 
+				for (const Employee & e : v)
+					std::cout << e.age << ", " << e.name << '\n';
+			}
+		
 	>> 'partial_sort()' : İlk 'n' tane öğeyi sıralı hale getiriyor. Örneğin, 50'000 tane öğrenci içerisinden en iyi 10 tanesini seçeceksek bu algoritma karlı olacaktır. En iyi on adet öğrenci bulmak için 50'000
 	tane öğeyi sıralamaya gerek yoktur. Birinci ve üçüncü parametre üzerinde gezilecek 'range' için başlangıç ve bitiş konumlarıyken, ikinci parametre ise sıralanmış 'range' in 'n' adedi. 
 		* Örnek 1,
@@ -28706,7 +29004,7 @@ fayda sağlayabilir.
 							auto iter = mySet.find(old_name);
 							if(iter != mySet.end())
 							{
-								mySet.erase(iter); // Anahtar ağaçtan çıkartıldı ve içindeki nesne de yok değildi.
+								mySet.erase(iter); // Anahtar ağaçtan çıkartıldı ve içindeki nesne de yok edildi..
 								mySet.insert(new_name); // Yeni bir nesne hayata geldi ve ağaca eklendi.
 							}
 							
@@ -29181,8 +29479,8 @@ fayda sağlayabilir.
 				Sıralı Veri Yapısı   => 2 3 3 3 5 5 7 7 7 8 12 16 19
 				Key: 7,  lower_bound =>             ^
 				      ,  upper_bound =>                   ^
-				Key: 4,  lower_bound =>          ^
-					     upper_bound =>          ^
+				Key: 4,  lower_bound =>         ^
+					     upper_bound =>         ^
 				Key: 13, lower_bound =>                        ^
 					   , upper_bound =>                        ^
 					   
@@ -29994,7 +30292,7 @@ fayda sağlayabilir.
 						fazilet sevda canan 
 						-----------------------------------------------------------------------------
 						Total number of combination : 6
-							*/
+					*/
 					
 					std::vector<std::string> sVecOne; fcs(sVecOne, 3, rname); std::sort(sVecOne.begin(), sVecOne.end(), f); print(sVecOne);
 					
@@ -31190,7 +31488,7 @@ fayda sağlayabilir.
 
 					std::vector<int> iVecTwo;
 					
-					std::copy_if(iVecOne.begin(), iVec.end(), std::back_inserter(iVecTwo), ref(gBig)); // Burada son argüman olan 'gBig' referans yolu ile gönderilmeseydi, ilgili 'copy_if' fonksiyonuna kopyalanacaktı.
+					std::copy_if(iVecOne.begin(), iVecOne.end(), std::back_inserter(iVecTwo), ref(gBig)); // Burada son argüman olan 'gBig' referans yolu ile gönderilmeseydi, ilgili 'copy_if' fonksiyonuna kopyalanacaktı.
 					return 0;
 				}
 				
@@ -31213,8 +31511,8 @@ fayda sağlayabilir.
 					
 					++iVecOne.at(0); std::cout << "a : " << a << "\n";
 						++iVecOne.at(1); std::cout << "b : " << b << "\n";
-						  ++iVecOne.at(2); std::cout << "c : " << c << "\n";
-							   ++iVecOne.at(3); std::cout << "d : " << d << "\n";
+							++iVecOne.at(2); std::cout << "c : " << c << "\n";
+								++iVecOne.at(3); std::cout << "d : " << d << "\n";
 					
 					return 0;
 				}
@@ -32127,13 +32425,6 @@ fayda sağlayabilir.
 					//..
 					int main()
 					{
-						/*
-							# OUTPUT #
-							Yığının en üstündeki çıkartılacak öğe: 2
-							Yığının en üstündeki çıkartılacak öğe: 1
-							Yığının en üstündeki çıkartılacak öğe: 0
-						*/
-						
 						std::deque<int> myDeque;
 						
 						//..
@@ -40115,7 +40406,7 @@ fayda sağlayabilir.
 			
 			else
 			{
-				std::cerr << "Please enter 's' or 'd' to create an unity Statically or Dynamically, respectively...\n";
+				std::cerr << "Please enter 's' or 'd' to create an unit Statically or Dynamically, respectively...\n";
 			}
 		}
 
@@ -40256,16 +40547,16 @@ fayda sağlayabilir.
 					ifs.seekg(0, std::ios::beg); // Dosya konum göstericisi, dosyanın başına alındı.
 					std::cout << ifs.tellg() << "\n";
 					
-					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, dosyanın başından itibaren 27-byte blok ileriye doğru ötelendi.
+					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, en sonki konumdan itibaren 27-byte blok ileriye doğru ötelendi.
 					std::cout << ifs.tellg() << "\n";
 					
-					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, dosyanın başından itibaren 27-byte blok ileriye doğru ötelendi.
+					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, en sonki konumdan itibaren 27-byte blok ileriye doğru ötelendi.
 					std::cout << ifs.tellg() << "\n";
 					
-					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, dosyanın başından itibaren 27-byte blok ileriye doğru ötelendi.
+					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, en sonki konumdan itibaren 27-byte blok ileriye doğru ötelendi.
 					std::cout << ifs.tellg() << "\n";
 					
-					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, dosyanın başından itibaren 27-byte blok ileriye doğru ötelendi.
+					ifs.seekg(27, std::ios::cur); // Dosya konum göstericisi, en sonki konumdan itibaren 27-byte blok ileriye doğru ötelendi.
 					std::cout << ifs.tellg() << "\n";
 					
 					return 0;
@@ -40444,11 +40735,11 @@ fayda sağlayabilir.
 								// Dosya konum göstericisi artık 'Ahmet' ile 'Kandemir' kelimeleri arasındaki boşluk karakterini göstermektedir.
 					std::cout << "[" << str << "]\n"; // OUTPUT => Ahmet
 					
-					iss >> str; // İlk boşluk karakterine kadarki karakterler 'str' değişkenine kopyalandı.
+					iss >> str; // İkinci boşluk karakterine kadarki karakterler 'str' değişkenine kopyalandı.
 								// Dosya konum göstericisi artık 'Kandemir' ile 'Pehlivanli' kelimeleri arasındaki boşluk karakterini göstermektedir.
 					std::cout << "[" << str << "]\n"; // OUTPUT => Kandemir
 					
-					iss >> str; // İlk boşluk karakterine kadarki karakterler 'str' değişkenine kopyalandı.
+					iss >> str; // Üçüncü boşluk karakterine kadarki karakterler 'str' değişkenine kopyalandı.
 								// Dosya konum göstericisi artık dosyanın sonunu göstermektedir.
 					std::cout << "[" << str << "]\n"; // OUTPUT => Pehlivanli
 					
@@ -42141,7 +42432,7 @@ olan ifadenin bir 'sabit-ifadesi' olması gerekmektedir.
 				constexpr auto x{ std::ratio<1, 5>::num }; // 'x' is 1
 				constexpr auto y{ std::ratio<8, 24>::num }; // 'y' is 1
 				
-				// 'num' isimli değişken, sadeleştirme sonucunda paydadaki kısım. Sadeleştirme otomati olarak yapılmakta.
+				// 'den' isimli değişken, sadeleştirme sonucunda paydadaki kısım. Sadeleştirme otomati olarak yapılmakta.
 				constexpr auto z{ std::ratio<1, 5>::den }; // 'z' is 5
 				constexpr auto t{ std::ratio<8, 24>::den }; // 't' is 3
 				return 0;
@@ -42465,7 +42756,7 @@ için 'chrono' isim alanını nitelememiz gerekmektedir.
 				/*
 					# OUTPUT #
 					milisaniye olarak sureyi girin : 123456789
-					34 saat, 17 dakika, 36 saniye, 789 saliese.
+					34 saat, 17 dakika, 36 saniye, 789 salise.
 				*/
 				
 				using namespace std;
@@ -42492,7 +42783,7 @@ için 'chrono' isim alanını nitelememiz gerekmektedir.
 					std::cout << sc.count() << " saniye, ";
 					
 				if( msc.count() )
-					std::cout << msc.count() << " saliese.\n";
+					std::cout << msc.count() << " salise.\n";
 				
 				return 0;
 			}
@@ -43862,10 +44153,10 @@ yukarıdaki işlemlerde kullanılmaktadır. Güvenilir kaynaklardan, başkaları
 			Anlamı   : "if...", 'i' ve 'f' karakterlerini içerecek,
 					   "if\s*...", 'i' ve 'f' karakterlerinden sonra herhangi miktarda boşluk karakteri içerebilir,
 					   "if\s*\(...", yukarı deyimin devamında '(' atomu gelmeli,
-					   "if\s*(.*...", yukarıdaki deyimdeki '(' atomundan sonra herhangi bir karakterden sonra herhangi miktarda karakter gelebilir.
-					   "if\s*(.*\)...", yukarıdaki deyimdeki bahsi geçen karakterlerden hemen sonra ')' atomu gelmeli.
+					   "if\s*\(.*...", yukarıdaki deyimdeki '(' atomundan sonra herhangi bir karakterden sonra herhangi miktarda karakter gelebilir.
+					   "if\s*\(.*\)...", yukarıdaki deyimdeki bahsi geçen karakterlerden hemen sonra ')' atomu gelmeli.
 					   "if\s*\(.*\)\s*", yukarıdaki deyimde bahsi geçen ')' atomundan hemen sonra herhangi miktarda boşluk karakteri gelebilir.
-					   "if\s*\(.*\)\s*", yukarıdaki deyimde bahsi geçen boşluk karakterinden sonra ';' atomu gelmeli.
+					   "if\s*\(.*\)\s*;", yukarıdaki deyimde bahsi geçen boşluk karakterinden sonra ';' atomu gelmeli.
 					   
 			if (x > 5)   ; // Bunu doğrulayacaktır.
 
@@ -43904,7 +44195,7 @@ yukarıdaki işlemlerde kullanılmaktadır. Güvenilir kaynaklardan, başkaları
 			783487943
 			
 		* Örnek 8, Geçerli Tarih sorgulaması:
-			Notasyon : "(0[1-9]|[12][0-9]|3[01])([-./])(0[1-9]|1[012])\2(19|20)\d\d"
+			Notasyon : "(0[1-9]|[12][0-9]|3[01])([-.\/])(0[1-9]|1[012])\2(19|20)\d\d"
 			Anlamı   : "(...)(...)(...)", şeklinde büyük resme bakarsak;
 					   "(0[1-9]|[12][0-9]|3[01])...", İlk başa '0' karakteri, devamında '1' ve '9' rakamları arasındaki rakamlardan birisi, '01' ve '09' rakamları arasındakiler
 													  veya '1' ve '2' rakamları ve '0' ile '9' rakamları arasındaki bir rakam, '10' ile '29' arasındakiler
@@ -44002,11 +44293,11 @@ yukarıdaki işlemlerde kullanılmaktadır. Güvenilir kaynaklardan, başkaları
 				*/
 				
 				const char* regexNotaion{R"(
-			Korkma, sönmez bu şafaklarda yüzen al sancak;
-			Sönmeden yurdumun "üstünde" tüten en son ocak.
-			O benim milletimin yıldızıdır, parlayacak;
-			O benimdir, o benim milletimindir ancak.
-			)"
+											Korkma, sönmez bu şafaklarda yüzen al sancak;
+											Sönmeden yurdumun "üstünde" tüten en son ocak.
+											O benim milletimin yıldızıdır, parlayacak;
+											O benimdir, o benim milletimindir ancak.
+											)"
 										};
 				
 				std::cout << regexNotaion << std::endl;
@@ -44043,11 +44334,11 @@ yukarıdaki işlemlerde kullanılmaktadır. Güvenilir kaynaklardan, başkaları
 				std::cout << "Our word list contains " << wordList.size() << " words." << std::endl;
 				
 				std::regex myRegexNotaion{ ".{2}[aeio][tmps].{3,5}" }; // Argüman olarak direkt olarak bir 'regex' notasyonu geçilmektedir.
-																	   // "....", herhangi bir karakterden bir adet
+																	   // ".", herhangi bir karakterden bir adet
 																	   // ".{2}", yukarıdaki notasyondan iki adet. Yani iki adet herhangi bir karakter
 																	   // ".{2}[aeio]...", yukarıdaki notasyona ek olarak 'a', 'e', 'i' ve 'o' karakterlerinden birini içermesi
 																	   // ".{2}[aeio][tmps]...", yukarıdaki notasyona ek olarak 't', 'm', 'p' ve 's' karakterlerinden birini içermesi
-																	   // ".{2}[aeio][tmps]....", herhangi bir karakterden bir adet"
+																	   // ".{2}[aeio][tmps]. ...", herhangi bir karakterden bir adet"
 																	   // ".{2}[aeio][tmps].{3,5}", yukarıdaki notasyonu sağlayan en az üç, en fazla beş adet. Yani herhangi bir karakterden en az üç, en fazla beş adet.
 				
 				for(const auto& word : wordList)
@@ -46893,15 +47184,15 @@ yazıyız sadece okuma amacıyla alıyorsak. Fakat bu durum zaman zaman ekstra m
 		//..
 		class A {
 			public:
-				virtual void f() { std::cout << "A"; } // ii. Fakat ilgili 'f()' fonksiyonumuz 'virtual' olduğundan ve 'g()' fonksiyonu da referans/gösterici yoluyla argüman aldığından 'virtual-dispatch' devreye girecek.
+				virtual void f() { std::cout << "A"; } // iii. Fakat ilgili 'f()' fonksiyonumuz 'virtual' olduğundan ve 'g()' fonksiyonu da referans/gösterici yoluyla argüman aldığından 'virtual-dispatch' devreye girecek.
 		};
 
 		class B : public A {
 			private:
-				void f() { std::cout << "B"; } // iii. Günün sonunda da bu fonksiyon çağrılacaktır.
+				void f() { std::cout << "B"; } // iv. Günün sonunda da bu fonksiyon çağrılacaktır.
 		};
 
-		void g(A& a) { a.f(); } // i. Dolayısıyla 'f()' için isim arama 'A' sınıfı içerisinde yapılacak ve bulunacak.
+		void g(A& a) { a.f(); } // ii. Dolayısıyla 'f()' için isim arama 'A' sınıfı içerisinde yapılacak ve bulunacak.
 
 		int main()
 		{
@@ -48226,10 +48517,10 @@ derleyiciye bağlı 'attribute' lar için, diğer derleyicilerin uyarı verme zo
 
 				* Örnek 2,
 					//..
-					class [[nodiscard]] Neco{}; // note: ‘Neco’ declared here
-					Neco f1() { return Neco{}; } // i. note: in call to ‘Neco f1()’, declared here
-					Neco f2() { return Neco{}; } // ii. note: in call to ‘Neco f1()’, declared here
-					Neco f3() { return Neco{}; } // iii. note: in call to ‘Neco f1()’, declared here
+					class [[nodiscard]] Neco{}; // note: ‘Neco’ defined here
+					Neco f1() { return Neco{}; } // i. note: in call to ‘Neco f1()’, defined here
+					Neco f2() { return Neco{}; } // ii. note: in call to ‘Neco f1()’, defined here
+					Neco f3() { return Neco{}; } // iii. note: in call to ‘Neco f1()’, defined here
 
 					int main()
 					{
@@ -48341,7 +48632,7 @@ derleyiciye bağlı 'attribute' lar için, diğer derleyicilerin uyarı verme zo
 							# OUTPUT #
 							sizeof Empty : 1
 							sizeof int   : 4
-							sizeof Empty : 8
+							sizeof Empty : 4
 						*/
 						
 						Empty ex;
@@ -48377,7 +48668,7 @@ derleyiciye bağlı 'attribute' lar için, diğer derleyicilerin uyarı verme zo
 							# OUTPUT #
 							sizeof Empty : 1
 							sizeof int   : 4
-							sizeof Empty : 8
+							sizeof Empty : 4
 						*/
 						
 						Empty ex;
@@ -48681,7 +48972,7 @@ Dolayısıyla bizim grup 'thread' de sonlanmış olacaktır. 'thread' lerin 'sta
 oluşturulım ve bunların hepsi de aynı fonksiyonu çalıştırsın. İlgili fonksiyonun gövdesindeki otomatik ömürlü değişkenler her bir
 'thread' için ayrı ayrı olacaktır. Fakat global ve 'static' yerel değişkenler prosese özgü olduklarından, her 'thread' ilgili 
 değişkenler için kendi kopyasını OLUŞTURMUYORLAR. Benze kural 'heap' alanındaki değişkenler için de geçerlidir. Statik ve dinamik
-ömürlü değişkenler 'thrad' tarafından ortak kullanılır, kendilerine ait kopyası oluşturulmaz. 'thread' arası haberleşme için özel
+ömürlü değişkenler 'thread' tarafından ortak kullanılır, kendilerine ait kopyası oluşturulmaz. 'thread' arası haberleşme için özel
 bir yönteme gerek yoktur, prosesler arası haberleşmeye nazaran. Zaten dinamik ve statik ömürlü nesneler 'thread' ler arasında ortak
 adresi kullandıklarından, bir 'thread' üzerinden yapılan değişikliği diğer 'thread' üzerinden görebiliyoruz. Burada önemli olan nokta
 iki farklı 'thread' in aynı prosese ait olmasıdır. 'thread' oluşturma, 'thread' arası haberleşme ve 'thread' arası geçişler proses
@@ -49244,10 +49535,12 @@ için senkronizasyon gerektiğinden, 'data-racing' şeklindeki problemler ile ka
 			t2.join();
 			
 			std::thread t3{ [](int n) {
-				for (int i = 20; i < n; ++i)
-					std::cout << i << " ";
-				std::cout << std::endl;
-			}, 30 };
+										for (int i = 20; i < n; ++i)
+											std::cout << i << " ";
+										std::cout << std::endl;
+									},
+									30 
+						 };
 			t3.join();
 			
 			std::thread t4{ MyClass::sprintn, 40 };
@@ -50051,11 +50344,6 @@ hayata gelmektedir. Dolayısıyla 'thread' e özgüdür.
 			std::cout << "(thread_local storage), z : " << z << std::endl << std::endl;
 		}
 
-		void foo(int id)
-		{
-			func(id); func(id); func(id); func(id);
-		}
-
 		int main()
 		{
 			/*
@@ -50241,3 +50529,246 @@ hayata gelmektedir. Dolayısıyla 'thread' e özgüdür.
 			t.join(); // Sentaks Hatası    
 		}
 /*================================================================================================================================*/
+> Genel Alıştırma Örnekleri,
+	* Örnek 1,
+		#include <iostream>
+		#include <functional>
+
+		#define myFuncMacro(void) std::cout << "void myFunc(void) was called.\n";
+
+		void myFunc(void) { std::cout << "void myFunc(void) was called.\n"; }
+
+		class myFuncClass{
+			public:
+				void operator()(void) { std::cout << "void myFunc(void) was called.\n"; }
+		};
+
+		int main() {
+			/*
+				# OUTPUT #
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+				void myFunc(void) was called.
+			*/
+
+			// Normal Fonksiyon Çağrısı
+			myFunc();
+			
+			// Fonksiyon Göstericisi Kullanarak
+			auto myFuncPtr{ myFunc };
+			myFuncPtr();
+			
+			// Fonksiyonel Makro Kullanarak
+			myFuncMacro();
+			
+			// Lambda Deyimi Kullanarak
+			auto myFuncLambda = []{ std::cout << "void myFunc(void) was called.\n"; };
+			myFuncLambda();
+			
+			// 'Functor' Kullanarak
+			myFuncClass{}();
+
+			// 'std::function' Kullanarak
+			std::function<void(void)> myFunction = myFunc;
+			myFunction();
+
+			// 'std::bind' Kullanarak:
+			std::bind(myFunc)();
+			
+			return 0;
+		}
+		
+	* Örnek 2,
+		//..
+		class MoveOnly{
+			public:
+				MoveOnly() = default;
+				MoveOnly(MoveOnly&&) {}
+				MoveOnly& operator=(MoveOnly&&) { return *this; }
+		};
+
+		int main()
+		{
+			MoveOnly a;
+			
+			// MoveOnly b{a}; // error: use of deleted function 'constexpr MoveOnly::MoveOnly(const MoveOnly&)'
+			
+			MoveOnly b;
+
+			// b = a; // error: use of deleted function 'constexpr MoveOnly::MoveOnly(const MoveOnly&)'
+
+			MoveOnly c{ std::move(b) };
+		}
+		
+	* Örnek 3,
+		//..
+		class CopyOnly{
+			public:
+				CopyOnly() = default;
+				CopyOnly(CopyOnly&& ) = delete;
+				CopyOnly& operator=(CopyOnly&&) = delete;
+
+				CopyOnly(const CopyOnly& ) {}
+				CopyOnly& operator=(const CopyOnly&) { return *this; }
+		};
+
+		int main()
+		{
+			CopyOnly a;
+			
+			CopyOnly b{a}; 
+			
+			b = a; 
+
+			// CopyOnly c{ std::move(b) }; // error: use of deleted function 'CopyOnly::CopyOnly(CopyOnly&&)'
+		}
+		
+	* Örnek 4,
+		//..
+		template<typename T>
+		class Myclass{};
+
+		int main()
+		{
+			auto f = [](int x){ return x*x; };
+			// Myclass<f> mx; // note:   expected a type, got ‘f’
+			
+			Myclass<decltype(f)> mx; // OK
+			
+			using g = int;
+			Myclass<g> my; // OK
+		}
+		
+	* Örnek 5,
+		//..
+		#include <iostream>
+
+		int& foo(int x)
+		{
+			return x; // MSVC : warning C4172: returning address of local variable or temporary: x
+		}
+
+		int main()
+		{
+
+			/*
+				# OUTPUT #
+				<source>(5) : warning C4172: returning address of local variable or temporary: x
+				cl : Command line warning D9002 : ignoring unknown option '-std=c++2b'
+				Execution build compiler returned: 0
+				Program returned: 0
+				i.   x : 31
+				ii.  x : 62
+				iii. x : 62
+			*/
+			int x = 31;
+			auto& y = foo(x);
+			
+			std::cout << "i.   x : " << x << std::endl;
+			x += 31;
+			std::cout << "ii.  x : " << x << std::endl;
+			y += 62;
+			std::cout << "iii. x : " << x << std::endl;
+			
+			return 0;
+		}
+		
+	* Örnek 6,
+		//..
+		#include <iostream>
+		#include <array>
+		#include <vector>
+
+		template<typename T, std::size_t size>
+		std::ostream& operator<<(std::ostream& os, const std::array<T, size>& array)
+		{
+			os << "[ " << array.front() << ", ";
+			
+			for(std::size_t i{1}; i < size - 1; ++i)
+				os << array[i] << ", ";
+			
+			os << array.back() << " ]\n";
+			
+			return os;
+		}
+
+		template<typename T>
+		std::ostream& operator<<(std::ostream& os, const std::vector<T>& array)
+		{
+			os << "[ " << array.front() << " | ";
+			
+			for(std::size_t i{1}; i < array.size() - 1; ++i)
+				os << array[i] << " | ";
+			
+			os << array.back() << " ]\n";
+			
+			return os;
+		}
+						
+		int main()
+		{
+			std::array<int, 5> arx{ 1, 2, 3, 4, 5 };
+			
+			std::cout << arx;
+
+			std::vector<int> ary{ 5, 6, 7, 8, 9 };
+			
+			std::cout << ary << std::endl;
+			
+			return 0;
+		}
+
+	* Örnek 7,
+		//..
+#include <iostream>
+#include <memory>			
+
+struct Myclass{
+    Myclass(int a, int b, int c) : _a(a), _b(b), _c(c) {}
+    int _a, _b, _c;
+};
+
+Myclass funcOne(int a, int b, int c)
+{
+    return Myclass{a, b, c};
+}
+
+Myclass funcTwo(int a, int b, int c)
+{
+    return {a, b, c};
+}
+
+template<typename ... Args>
+Myclass funcThree(Args&& ... args)
+{
+    return Myclass{ std::forward<Args>(args)... };    
+}
+
+std::ostream& operator<<(std::ostream& os, const Myclass& other)
+{
+    return os << "[ " << other._a << ", " << other._b << ", " << other._c << " ]";
+}
+
+int main()
+{
+	/*
+		# OUTPUT #
+		[ 1, 2, 3 ]
+        [ 10, 20, 30 ]
+        [ 100, 200, 300 ]
+	*/
+	
+	auto objOne{ funcOne(1, 2, 3) }; std::cout << objOne << std::endl;
+	auto objTwo{ funcTwo(10, 20, 30) }; std::cout << objTwo << std::endl;
+	auto objThree{ funcThree(100, 200, 300) }; std::cout << objThree << std::endl;
+	
+	return 0;
+}
+
+
+
+
